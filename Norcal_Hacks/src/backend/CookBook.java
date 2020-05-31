@@ -20,7 +20,7 @@ public class CookBook
     public CookBook()
     {
         recipes = new ArrayList<Recipe>();
-        accepted = new String[] {"foodnetwork"};
+        accepted = new String[] {"foodnetwork", "sallysbaking"};
         threadCounter = 0;
         
         //Setup driver and put it on google
@@ -48,7 +48,7 @@ public class CookBook
         for (WebElement w : elements)
         {
             String link = w.getAttribute( "href" );
-            if(!link.contains( "google" ))
+            if(!link.contains( "google" ) && !link.contains( "youtube" ))
             {
                 links.add( link.trim() );
             }
@@ -68,6 +68,7 @@ public class CookBook
         {
             if (link.contains( s ))
             {
+                while(!isAvailable()){}
                 WebDriver d = new ChromeDriver(options);
                 SearchThread t = new SearchThread(d, s, link, this);
                 threadCounter++;
@@ -78,8 +79,19 @@ public class CookBook
     
     public void addRecipe(Recipe r)
     {
-        recipes.add( r );
+        if (r == null)
+        {
+        }
+        else
+        {
+            recipes.add( r );
+        }
         threadCounter--;
+    }
+    
+    public synchronized boolean isAvailable()
+    {
+        return threadCounter <= 1;
     }
     
     public synchronized boolean isDone()
@@ -101,8 +113,7 @@ public class CookBook
         String result = "";
         for (int i = 0; i < recipes.size(); i++)
         {
-            result += (i+1) + ":\n";
-            result += recipes.get( i );
+            result += (i+1) + ":\n" + recipes.get( i ) + "\n";
         }
         return result;
     }

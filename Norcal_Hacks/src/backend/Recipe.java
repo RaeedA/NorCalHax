@@ -1,10 +1,9 @@
 package backend;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.openqa.selenium.WebElement;
 
 /**
  *  Represents a recipe with instructions, ingredients, and a link
@@ -18,22 +17,30 @@ public class Recipe
     private ArrayList<Ingredient> myIngredients;
     private ArrayList<String> myInstructions;
     private String myLink;
+    private Time cookingTime;
     
     /**
      * @param ingredients webelements of ingredients
      * @param instructions webelements with instructions
      * @param link link to site
      */
-    public Recipe(ArrayList<WebElement> ingredients, ArrayList<WebElement> instructions, String link)
+    @SuppressWarnings("deprecation")
+    public Recipe(ArrayList<String> ingredients, ArrayList<String> instructions, String link, String time)
     {
         myLink = link;
         myIngredients = new ArrayList<Ingredient>();
         myInstructions = new ArrayList<String>();
         Pattern p = Pattern.compile( "^([\\d\\s\\/]+)(\\w+)" );
-        for (WebElement w : ingredients)
+        for (String w : ingredients)
         {
-            String text = w.getText().trim();
-            Matcher m = p.matcher( w.getText());
+            String text = w;
+            int index = text.indexOf( "and" );
+            if (index < 15 && index != -1)
+            {
+                //System.out.println(index + " " + text);
+                text = text.substring( 0, index-1 ) + text.substring( index+3 );
+            }
+            Matcher m = p.matcher(text);
             if(m.find())
             {
                 myIngredients.add( new Ingredient(m, text.substring( m.end() ).trim()) );
@@ -43,9 +50,24 @@ public class Recipe
                 myIngredients.add( new Ingredient(text));
             }
         }
-        for (WebElement w : instructions)
+        Time t = new Time(0, 0, 0);
+        p = Pattern.compile( "(\\d+)\\sh" );
+        Matcher m = p.matcher( time );
+        if (m.find())
         {
-            myInstructions.add( w.getText().trim() );
+            t.setHours( Integer.parseInt(m.group(1) ));
+        }
+        p = Pattern.compile( "(\\d+)\\sm" );
+        m = p.matcher( time );
+        if (m.find())
+        {
+            t.setMinutes( Integer.parseInt(m.group(1) ));
+        }
+        cookingTime = t;
+        
+        for (String w : instructions)
+        {
+            myInstructions.add( w );
         }
     }
 
@@ -66,8 +88,7 @@ public class Recipe
         {
             result += s + " ";
         }
-        result = result.substring( 0, result.length()-1 ) + "\nLink: ";
-        result += myLink;
+        result = result.substring( 0, result.length()-1 ) + "\nTime: " + cookingTime + "\nLink: " + myLink;
         return result;
     }
 
@@ -93,5 +114,13 @@ public class Recipe
     public String getMyLink()
     {
         return myLink;
+    }
+    
+    /**
+     * @return cooking time
+     */
+    public Time getCookingTime()
+    {
+        return cookingTime;
     }
 }
