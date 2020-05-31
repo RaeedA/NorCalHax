@@ -22,27 +22,31 @@ public class ResultScreen extends Screen
         ingredients.add( "milk" );
         ingredients.add( "butter" );
         // GUI components
-        GridLayout ingredientsLayout = new GridLayout(ingredients.size(), 2);
+        GridLayout ingredientsLayout = new GridLayout(ingredients.size() + 1, 2);
         ingredientsLayout.setHgap( 25 );
         JPanel ingredientsPanel = new JPanel(ingredientsLayout);
+        JPanel instructionsPanel = new JPanel();
         
-        // Buttons
-        JButton searchButton = new JButton("Search");
+        // Text Area
+        JTextArea instructionsArea = new JTextArea();
+        instructionsArea.setText( "Hello" );
         
-        // TextFields
-        JTextField searchField = new JTextField(20);
+        // Labels
+        JLabel ingredientsLabel = new JLabel("Ingredients");
+        //label.setT;
+        instructionsPanel.add( makeLabel("Instructions: ", JLabel.RIGHT, JLabel.CENTER) );
+        instructionsPanel.add( instructionsArea );
         
-        
-        //searchPanel.add( searchField );
-        //searchPanel.add( searchButton);
+        ingredientsPanel.add( makeLabel("Ingredients: ", JLabel.RIGHT, JLabel.CENTER ));
+        ingredientsPanel.add( new JLabel() );
         for(int i = 0; i < ingredients.size(); i++)
         {
-            ingredientsPanel.add( new JLabel(ingredients.get( i )) );
+            ingredientsPanel.add( makeLabel(ingredients.get( i ), JLabel.RIGHT, JLabel.CENTER ) );
             ingredientsPanel.add( new JLabel("0"));
         }
         
         add(ingredientsPanel, BorderLayout.WEST );
-        
+        add(instructionsPanel, BorderLayout.EAST );
         // Event Handlers for UI components
     }
 
@@ -51,6 +55,17 @@ public class ResultScreen extends Screen
     {
         // TODO Auto-generated method stub
         
+    }
+    private JLabel makeLabel( String text, int horizPosition, int vertPosition)
+    {
+        JLabel label = new JLabel();
+        if(text != null)
+        {
+            label.setText( text );
+        }
+        label.setHorizontalAlignment( horizPosition );
+        label.setVerticalAlignment( vertPosition );
+        return label;
     }
     
     
