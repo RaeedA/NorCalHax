@@ -1,12 +1,15 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
 import frontend.LoadingScreen;
+import frontend.ResultScreen;
+
 import javax.swing.JProgressBar;
 
 import org.openqa.selenium.By;
@@ -26,6 +29,7 @@ public class CookBook
     private int completed;
     private int maxRecipes;
     private Stack<String> links;
+    private String product;
     
     public CookBook()
     {
@@ -43,6 +47,7 @@ public class CookBook
     
     public void getLinks(String product)
     {
+        this.product  = product ;
         //Setup driver and put it on google
         System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
         ChromeOptions o = new ChromeOptions();
@@ -88,18 +93,31 @@ public class CookBook
     
     public synchronized String[] getLink()
     {
-        while (true)
+        try
         {
-            String link = links.pop();
-            for(String s : accepted)
+            while (true)
             {
-                if (link.contains( s ))
+                String link = links.pop();
+                for(String s : accepted)
                 {
-                    return new String[] {link, s};
+                    if (link.contains( s ))
+                    {
+                        return new String[] {link, s};
+                    }
                 }
+                addRecipe(null);
             }
-            addRecipe(null);
         }
+        catch(EmptyStackException e)
+        {
+            return null;
+        }
+    }
+    
+    public void finish()
+    {
+        ( (LoadingScreen)bar.getParent().getParent() ).setVisible( false );
+        ResultScreen screen = new ResultScreen(this);
     }
     
     public synchronized void addRecipe(Recipe r)
@@ -112,10 +130,12 @@ public class CookBook
             recipes.add( r );
         }
         completed++;
+        System.out.print( completed  + "/" + maxRecipes );
         bar.setValue( completed );
-        if (bar.getValue() == maxRecipes)
+        System.out.println(hasLinks());
+        if(!hasLinks())
         {
-            ( (LoadingScreen)bar.getParent().getParent() ).finish();
+            finish();
         }
     }
     
@@ -171,5 +191,10 @@ public class CookBook
     public boolean hasLinks()
     {
         return !links.isEmpty();
+    }
+
+    public String getProduct()
+    {
+        return product;
     }
 }

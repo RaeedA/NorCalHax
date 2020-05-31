@@ -38,6 +38,8 @@ public class SearchThread extends Thread
                 myBook.addRecipe( null );
             }
         }
+        System.out.println("done!");
+        System.out.println(myBook.hasLinks());
         myDriver.quit();
     }
     

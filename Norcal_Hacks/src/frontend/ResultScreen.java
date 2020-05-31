@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import backend.*;
 
-public class ResultScreen extends Screen
+public class ResultScreen extends JFrame
 {
     private Recipe recipe;
     private CookBook book;
@@ -16,24 +16,19 @@ public class ResultScreen extends Screen
     {
         super("Result!");
         recipe = book.chooseBestRecipe();
-        setComponents();
-        pack();
-    }
-
-    @Override
-    protected void setComponents()
-    {
-        add(displayTitle(), BorderLayout.NORTH);
-        add(displayIngredients(), BorderLayout.WEST );
-        add(displayInstructions(), BorderLayout.EAST );
-    }
-
-    @Override
-    protected void resetSearch()
-    {
-        // TODO Auto-generated method stub
+        JPanel panel = new JPanel();
+        panel.add(displayTitle(), BorderLayout.NORTH);
+        panel.add(displayIngredients(), BorderLayout.WEST );
+        panel.add(displayInstructions(), BorderLayout.EAST );
+        add(panel);
         
+        //Wrap up
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo( null );
+        pack();
+        setVisible(true); 
     }
+    
     private JLabel makeLabel( String text, int horizPosition, int vertPosition)
     {
         JLabel label = new JLabel();
@@ -108,7 +103,7 @@ public class ResultScreen extends Screen
     public JPanel displayTitle()
     {
         JPanel titlePanel = new JPanel();
-        JLabel titleLabel = new JLabel( foodName + " Recipe:");
+        JLabel titleLabel = new JLabel( book.getProduct() + " Recipe:");
         Font labelFont = titleLabel.getFont();
         String labelText = titleLabel.getText();
         int stringWidth = titleLabel.getFontMetrics(labelFont).stringWidth(labelText);
