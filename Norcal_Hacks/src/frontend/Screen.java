@@ -10,6 +10,8 @@ import javax.swing.*;
 public abstract class Screen extends JFrame
 {
     protected String foodName;
+    protected int width;
+    protected int height;
     public Screen(String title)
     {
         super(title);
@@ -24,8 +26,10 @@ public abstract class Screen extends JFrame
         Dimension dim = kit.getScreenSize();
         int screenWidth = dim.width;
         int screenHeight = dim.height;
+        width = screenWidth / 2;
+        height = screenHeight / 2;
         
-        setSize(screenWidth/2, screenHeight/2);
+        setSize(width, height);
         
         // position frame in center of screen
         setLocationRelativeTo(null);
