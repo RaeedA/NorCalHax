@@ -25,10 +25,12 @@ public class SearchThread extends Thread
     {
         while (myBook.hasLinks())
         {
+            System.out.println("getting links");
             getNewLink();
             try
             {
                 myDriver.get( myLink );
+                System.out.println("went to page");
                 getRecipe();
             }
             catch(NoClassDefFoundError e)
@@ -51,17 +53,19 @@ public class SearchThread extends Thread
         ArrayList<WebElement> ingredients = null;
         ArrayList<WebElement> instructions = null;
         WebElement cookingTime = null;
+        System.out.println("instanciated variables");
         switch(myType)
         {
             case("foodnetwork"):
                 try {
-                ingredients = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Ingredients__a-Ingredient" ) );
-                instructions = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Method__m-Step" ) );
-                cookingTime = myDriver.findElement( By.cssSelector( ".o-RecipeInfo__a-Description.m-RecipeInfo__a-Description--Total" ) );
+                    ingredients = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Ingredients__a-Ingredient" ) );
+                    instructions = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Method__m-Step" ) );
+                    cookingTime = myDriver.findElement( By.cssSelector( ".o-RecipeInfo__a-Description.m-RecipeInfo__a-Description--Total" ) );
                 break;
                 }
                 catch(NoSuchElementException e)
                 {
+                    System.out.println("oops1");
                     myBook.addRecipe(null);
                     return;
                 }
@@ -77,11 +81,14 @@ public class SearchThread extends Thread
                 }
                 catch(IndexOutOfBoundsException e)
                 {
+                    System.out.println("oops2");
                     myBook.addRecipe(null);
                     return;
                 }
             }
         }
+        System.out.println("switchcase done");
         ChefThread t = new ChefThread(myLink, myType, ingredients, instructions, cookingTime, myBook);
+        System.out.println("starting again");
     }
 }

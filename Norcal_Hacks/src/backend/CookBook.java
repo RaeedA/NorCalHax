@@ -1,7 +1,6 @@
 package backend;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -23,7 +22,7 @@ public class CookBook
     private WebDriver driver;
     private String[] accepted;
     private JProgressBar bar;
-    private int threadNum = 2;
+    private int threadNum = 3;
     private int completed;
     private int maxRecipes;
     private Stack<String> links;
@@ -83,6 +82,7 @@ public class CookBook
         {
             WebDriver driver = new ChromeDriver(options);
             SearchThread thread = new SearchThread(driver, this);
+            thread.start();
         }
     }
     
@@ -98,6 +98,7 @@ public class CookBook
                     return new String[] {link, s};
                 }
             }
+            addRecipe(null);
         }
     }
     
