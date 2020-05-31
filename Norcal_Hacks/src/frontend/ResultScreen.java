@@ -13,7 +13,7 @@ public class ResultScreen extends Screen
     CookBook book;
     public ResultScreen(String foodToSearch)
     {
-        super("Recipe for " + foodToSearch);
+        super(foodToSearch);
         foodName = foodToSearch;
         book = new CookBook();
         book.getRecipes( foodName );
@@ -28,6 +28,7 @@ public class ResultScreen extends Screen
         add(displayTitle(), BorderLayout.NORTH);
         add(displayIngredients(), BorderLayout.WEST );
         add(displayInstructions(), BorderLayout.EAST );
+        pack();
     }
 
     @Override
@@ -80,13 +81,11 @@ public class ResultScreen extends Screen
         GridBagLayout ingredientsLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
         ingredientsPanel.setLayout( ingredientsLayout );
-        int fillCons = GridBagConstraints.BOTH;
-        
-        constraints.fill = fillCons;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx += 5;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.CENTER), constraints );
+        ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.EAST), constraints );
         constraints.gridy = 1;
         constraints.weighty += 5;
         Ingredient ingredient;
