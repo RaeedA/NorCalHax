@@ -89,6 +89,11 @@ public class ChefThread extends Thread
                     book.addRecipe(null);
                     break;
                 }
+                catch(NoClassDefFoundError e)
+                {
+                    book.addRecipe( null );
+                    break;
+                }
             }
         }
     }
