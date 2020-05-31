@@ -56,7 +56,7 @@ public class ResultScreen extends JFrame
     }
     
     private JPanel displayInstructions()
-    {
+    { 
         JPanel panel = new JPanel();
         ArrayList<String> instructions = recipe.getMyInstructions();
 
