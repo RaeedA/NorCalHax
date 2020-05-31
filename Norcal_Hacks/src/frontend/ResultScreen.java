@@ -17,6 +17,7 @@ public class ResultScreen extends Screen
         foodName = foodToSearch;
         book = new CookBook();
         book.getRecipes( foodName );
+        while(!book.isDone()){}
         recipe = book.chooseBestRecipe();
         setComponents();
     }
