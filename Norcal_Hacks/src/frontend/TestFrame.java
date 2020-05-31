@@ -23,17 +23,21 @@ public class TestFrame extends JFrame
         setLocationRelativeTo(null);
         
         // GUI components
+        JPanel panel = new JPanel();
         JPanel searchPanel = new JPanel();
         JPanel displayPanel = new JPanel();
         JPanel anotherPanel = new JPanel();
-        
-        searchPanel.add( new JTextField(30) );
+        //searchPanel.setBackground(Color.ORANGE);
+        searchPanel.add( new JTextField(20) );
         displayPanel.add( new JTextArea());
         anotherPanel.add(new JTextArea());
         
-        add(searchPanel, BorderLayout.NORTH );
-        add(displayPanel, BorderLayout.CENTER);
-        add(anotherPanel, BorderLayout.SOUTH);
+        
+        panel.add(searchPanel, BorderLayout.NORTH );
+        panel.add(displayPanel, BorderLayout.CENTER);
+        panel.add(anotherPanel, BorderLayout.SOUTH);
+        panel.setBackground( Color.ORANGE );
+        add(panel);
         
         // Setting frame behavior when user closes the Frame
         addWindowListener( new WindowAdapter() 
