@@ -1,8 +1,12 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -106,6 +110,16 @@ public class CookBook
             return null;
         }
         return recipes.get( 0 );
+    }
+    
+    public Queue<Recipe> sortByTime()
+    {
+        Queue<Recipe> queue = new PriorityQueue<Recipe>(new TimeComparator());
+        for (Recipe r : recipes)
+        {
+            queue.add( r );
+        }
+        return queue;
     }
     
     public String toString()

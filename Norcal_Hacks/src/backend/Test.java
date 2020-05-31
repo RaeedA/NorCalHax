@@ -1,5 +1,7 @@
 package backend;
 
+import java.util.Queue;
+
 public class Test
 {
     public static void main(String[] args)
@@ -10,7 +12,11 @@ public class Test
         while(!book.isDone())
         {
         }
-        System.out.println("Book:\n" + book);
+        Queue<Recipe> q = book.sortByTime();
+        for (Recipe r : q)
+        {
+            System.out.println(r);
+        }
         
         //Close everything
         //myDriver.quit();
