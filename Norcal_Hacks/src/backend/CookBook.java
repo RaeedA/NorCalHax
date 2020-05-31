@@ -126,7 +126,6 @@ public class CookBook
         }
         ((LoadingScreen)( bar.getParent().getParent().getParent().getParent().getParent())).setVisible( false );
         ResultScreen screen = new ResultScreen(this);
-        sortedRecipes = sortByTime();
         screen.setRecipe( chooseBestRecipe() );
         screen.setRecipeIndex( 0 );
         screen.start();
@@ -162,12 +161,12 @@ public class CookBook
     
     public Recipe chooseBestRecipe()
     {
-        if(sortedRecipes.isEmpty())
+        if(recipes.isEmpty())
         {
             return null;
         }
-        //return recipes.get( 0 );
-        return sortedRecipes.remove();
+        return recipes.get( 0 );
+        //return sortedRecipes.remove(); 
     }
     
     public Recipe getRecipe( int index )

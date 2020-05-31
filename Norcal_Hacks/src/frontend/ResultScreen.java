@@ -19,7 +19,12 @@ public class ResultScreen extends JFrame
         super("Result!");
         product = book.getProduct();
         recipe = book.chooseBestRecipe();
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension dim = kit.getScreenSize();
+        int screenWidth = dim.width;
+        int screenHeight = dim.height;
         
+        setSize(screenWidth/2, screenHeight/2);
         
         //Wrap up
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,7 +40,8 @@ public class ResultScreen extends JFrame
         panel.add(displayIngredients(), BorderLayout.WEST );
         panel.add(displayInstructions(), BorderLayout.EAST );
         panel.setBackground(Color.ORANGE);
-        add(panel);
+        add(panel, BorderLayout.CENTER);
+        pack();
     }
     
     private JLabel makeLabel( String text, int horizPosition, int vertPosition)
@@ -69,7 +75,7 @@ public class ResultScreen extends JFrame
             instructionsArea.append( (i+1) +  ". " + instructions.get( i ) + "\n\n" ); ;
         }
         //Label
-        instructionsPanel.add( makeLabel("Instructions: ", JLabel.LEFT, JLabel.CENTER) );
+        instructionsPanel.add( makeLabel("Instructions: ", JLabel.CENTER, JLabel.CENTER) );
         instructionsPanel.add( instructionsArea );
         return instructionsPanel;
     }
@@ -87,7 +93,7 @@ public class ResultScreen extends JFrame
         constraints.gridy = 0;
         ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.CENTER), constraints );
         constraints.gridy = 1;
-        constraints.weighty += 5;
+        constraints.weighty += 10;
         Ingredient ingredient;
         for(int i = 0; i < ingredients.size(); i++)
         {
@@ -95,11 +101,11 @@ public class ResultScreen extends JFrame
             constraints.gridx = 0;
             ingredientsPanel.add(new JLabel());
             constraints.gridx = 1;
-            constraints.gridy++;
+            constraints.gridy += 2;
             ingredientsPanel.add( new JLabel(ingredient.getType()),constraints );
             if(ingredient.isMeasureable())
             {
-                constraints.gridx = 3;
+                constraints.gridx = 4;
                 ingredientsPanel.add( new JLabel(ingredient.getAmount() + " " + ingredient.getUnits()), constraints);
             }
             
@@ -112,19 +118,19 @@ public class ResultScreen extends JFrame
     {
         JPanel titlePanel = new JPanel();
         JLabel titleLabel = new JLabel(product + " Recipe:");
-        Font labelFont = titleLabel.getFont();
-        String labelText = titleLabel.getText();
-        int stringWidth = titleLabel.getFontMetrics(labelFont).stringWidth(labelText);
-        int componentWidth = titleLabel.getWidth();
-        
-        double widthRatio = (double) componentWidth / (double)stringWidth;
-        
-        int newFontSize = (int)(labelFont.getSize() * widthRatio);
-        int componentHeight = titleLabel.getHeight();
-        
-        int fontSizeToUse = Math.min( newFontSize, componentHeight );
-        
-        titleLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+//        Font labelFont = titleLabel.getFont();
+//        String labelText = titleLabel.getText();
+//        int stringWidth = titleLabel.getFontMetrics(labelFont).stringWidth(labelText);
+//        int componentWidth = titleLabel.getWidth();
+//        
+//        double widthRatio = (double) componentWidth / (double)stringWidth;
+//        
+//        int newFontSize = (int)(labelFont.getSize() * widthRatio);
+//        int componentHeight = titleLabel.getHeight();
+//        
+//        int fontSizeToUse = Math.min( newFontSize, componentHeight );
+//        
+//        titleLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
         
         titlePanel.add( titleLabel );
         return titlePanel;
