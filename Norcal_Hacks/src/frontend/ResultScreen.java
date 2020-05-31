@@ -25,7 +25,7 @@ public class ResultScreen extends Screen
     @Override
     protected void setComponents()
     {
-        System.out.println(recipe);
+        add(displayTitle(), BorderLayout.NORTH);
         add(displayIngredients(), BorderLayout.WEST );
         add(displayInstructions(), BorderLayout.EAST );
     }
@@ -57,11 +57,16 @@ public class ResultScreen extends Screen
         instructionsPanel.setLayout( instructionsLayout );
         //Text Area
         JTextArea instructionsArea = new JTextArea();
+        instructionsArea.setColumns( 35 );
+        instructionsArea.setWrapStyleWord(true);
+        instructionsArea.setLineWrap(true);
+        instructionsArea.setEditable( false );
+        instructionsArea.setFocusable( false );
+        
         for(int i = 0; i < instructions.size(); i++)
         {
-            instructionsText += instructions.get( i ) + "\n";
+            instructionsArea.append( (i+1) +  ". " + instructions.get( i ) + "\n\n" ); ;
         }
-        instructionsArea.setText( instructionsText );
         //Label
         instructionsPanel.add( makeLabel("Instructions: ", JLabel.LEFT, JLabel.CENTER) );
         instructionsPanel.add( instructionsArea );
@@ -75,13 +80,55 @@ public class ResultScreen extends Screen
         GridBagLayout ingredientsLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
         ingredientsPanel.setLayout( ingredientsLayout );
-        int horiz = GridBagConstraints.HORIZONTAL;
+        int fillCons = GridBagConstraints.BOTH;
         
-        constraints.fill = horiz;
-        constraints.gridx = 0;
+        constraints.fill = fillCons;
+        constraints.weightx += 5;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.CENTER), constraints );
         constraints.gridy = 1;
-        ingredientsPanel.add( new JLabel("Ingredients") );
+        constraints.weighty += 5;
+        Ingredient ingredient;
+        for(int i = 0; i < ingredients.size(); i++)
+        {
+            ingredient = ingredients.get( i );
+            constraints.gridx = 0;
+            ingredientsPanel.add(new JLabel());
+            constraints.gridx = 1;
+            constraints.gridy++;
+            ingredientsPanel.add( new JLabel(ingredient.getType()),constraints );
+            if(ingredient.getAmount() != null || ingredient.getUnits() != null)
+            {
+                constraints.gridx = 3;
+                ingredientsPanel.add( new JLabel(ingredient.getAmount() + " " + ingredient.getUnits()), constraints);
+            }
+            
+        }
         return ingredientsPanel;
+    }
+    
+    //Bug?
+    public JPanel displayTitle()
+    {
+        JPanel titlePanel = new JPanel();
+        JLabel titleLabel = new JLabel( foodName + " Recipe:");
+        Font labelFont = titleLabel.getFont();
+        String labelText = titleLabel.getText();
+        int stringWidth = titleLabel.getFontMetrics(labelFont).stringWidth(labelText);
+        int componentWidth = titleLabel.getWidth();
+        
+        double widthRatio = (double) componentWidth / (double)stringWidth;
+        
+        int newFontSize = (int)(labelFont.getSize() * widthRatio);
+        int componentHeight = titleLabel.getHeight();
+        
+        int fontSizeToUse = Math.min( newFontSize, componentHeight );
+        
+        titleLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+        
+        titlePanel.add( titleLabel );
+        return titlePanel;
     }
     
     
