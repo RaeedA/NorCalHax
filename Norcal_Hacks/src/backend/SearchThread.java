@@ -37,10 +37,24 @@ public class SearchThread extends Thread
             {
                 myBook.addRecipe( null );
             }
+            try
+            {
+                Thread.sleep( 100 );
+            }
+            catch ( InterruptedException e )
+            {
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            Thread.sleep( 100 );
+        }
+        catch ( InterruptedException e )
+        {
+            e.printStackTrace();
         }
         System.out.println("done!");
-        System.out.println(myBook.hasLinks());
-        myDriver.quit();
     }
     
     public void getNewLink()
@@ -91,6 +105,7 @@ public class SearchThread extends Thread
         }
         System.out.println("switchcase done");
         ChefThread t = new ChefThread(myLink, myType, ingredients, instructions, cookingTime, myBook);
+        t.start();
         System.out.println("starting again");
     }
 }

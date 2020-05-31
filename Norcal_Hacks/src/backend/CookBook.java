@@ -30,6 +30,7 @@ public class CookBook
     private int maxRecipes;
     private Stack<String> links;
     private String product;
+    private WebDriver[] drivers;
     
     public CookBook()
     {
@@ -83,9 +84,11 @@ public class CookBook
     
     public void getRecipes()
     {
+        drivers = new WebDriver[threadNum];
         for (int i = 0; i < threadNum; i++)
         {
             WebDriver driver = new ChromeDriver(options);
+            drivers[i] = driver;
             SearchThread thread = new SearchThread(driver, this);
             thread.start();
         }
@@ -116,6 +119,10 @@ public class CookBook
     
     public void finish()
     {
+        for (int i = 0; i < threadNum; i++)
+        {
+            drivers[i].quit();
+        }
         ( (LoadingScreen)bar.getParent().getParent() ).setVisible( false );
         ResultScreen screen = new ResultScreen(this);
     }
