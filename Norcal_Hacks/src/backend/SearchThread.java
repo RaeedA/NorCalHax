@@ -39,7 +39,7 @@ public class SearchThread extends Thread
             }
             try
             {
-                Thread.sleep( 200 );
+                Thread.sleep( 250 );
             }
             catch ( InterruptedException e )
             {
@@ -52,8 +52,11 @@ public class SearchThread extends Thread
     public void getNewLink()
     {
         String[] results = myBook.getLink();
-        myLink = results[0];
-        myType = results[1];
+        if (results[0] != null)
+        {
+            myLink = results[0];
+            myType = results[1];
+        }
     }
     
     private void getRecipe()
@@ -83,7 +86,7 @@ public class SearchThread extends Thread
                 try
                 {
                     ingredients = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-ingredients" ) );
-                    instructions = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-instructions" ) );
+                    instructions = (ArrayList<WebElement>)myDriver.findElements( By.cssSelector( ".tasty-recipes-instructions" ) );
                     cookingTime = myDriver.findElement(By.className("tasty-recipes-total-time"));
                     break;
                 }

@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Application
+public class Recipe_Receipts
 {
     public static void main(String[] args)
     {
