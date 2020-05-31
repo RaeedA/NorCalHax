@@ -125,8 +125,8 @@ public class CookBook
             drivers[i].quit();
         }
         ((LoadingScreen)( bar.getParent().getParent().getParent().getParent().getParent())).setVisible( false );
-        ResultScreen screen = new ResultScreen(this);
         sortedRecipes = sortByTime();
+        ResultScreen screen = new ResultScreen(this);
         screen.setRecipe( chooseBestRecipe() );
         screen.setRecipeIndex( 0 );
         screen.start();
@@ -166,7 +166,6 @@ public class CookBook
         {
             return null;
         }
-        //return recipes.get( 0 );
         return sortedRecipes.remove();
     }
     

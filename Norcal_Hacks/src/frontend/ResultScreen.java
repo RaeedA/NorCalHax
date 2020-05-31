@@ -31,11 +31,22 @@ public class ResultScreen extends JFrame
     public void start()
     {
         JPanel panel = new JPanel();
-        panel.add(displayTitle(), BorderLayout.NORTH);
-        panel.add(displayIngredients(), BorderLayout.WEST );
-        panel.add(displayInstructions(), BorderLayout.EAST );
+        panel.setLayout( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridwidth = 2;
+        panel.add(displayTitle(), c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.gridheight = 10;
+        panel.add(displayIngredients(), c );
+        c.gridx = 1;
+        c.gridy = 1;
+        panel.add(displayInstructions(),c );
         panel.setBackground(Color.ORANGE);
         add(panel);
+        pack();
     }
     
     private JLabel makeLabel( String text, int horizPosition, int vertPosition)
@@ -148,6 +159,13 @@ public class ResultScreen extends JFrame
         screen1.setRecipeIndex( 1 );
         screen2.setRecipeIndex( 2 );
         return null;
+    }
+    
+    public void next()
+    {
+        ResultScreen screen = new ResultScreen(book);
+        screen.start();
+        setVisible(false);
     }
     
     public void setRecipe(Recipe recipe)
