@@ -48,7 +48,7 @@ public class Recipe
         String result = "Ingredients: ";
         for (Ingredient i : myIngredients)
         {
-            result += i + ", ";
+            result += i + "; ";
         }
         result = result.substring( 0, result.length()-2 ) + "\nInstructions: ";
         for (String s : myInstructions)

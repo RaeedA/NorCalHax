@@ -51,28 +51,19 @@ public class Ingredient
                 result += "s";
             }
         }
-        else if (ingredient.contains( "salt" ))
-        {
-            result = "salt";
-        }
-        else if (ingredient.contains( "sugar" ))
-        {
-            result = lookBehind(ingredient, "sugar", m, p);
-        }
-        else if (ingredient.contains( "extract" ))
-        {
-            result = lookBehind(ingredient, "extract", m, p);
-        }
         else if (ingredient.contains( "butter" ))
         {
             if (ingredient.contains( "butter," ))
             {
                 result = lookBehind(ingredient, "butter", m, p);
-                p = Pattern.compile( "(?<=butter,)\\s[\\w-]+" );
-                m = p.matcher( ingredient );
-                if(m.find())
+                
+                if(ingredient.contains( "room temp" ))
                 {
-                    result += "," + m.group();
+                    result += ", room temperature";
+                }
+                else if(ingredient.contains( "melted" ))
+                {
+                    result += ", melted";
                 }
             }
             else
@@ -88,6 +79,22 @@ public class Ingredient
                     result = lookBehind(ingredient, "butter", m, p);
                 }
             }
+        }
+        else if (ingredient.contains( "salt" ))
+        {
+            result = "salt";
+        }
+        else if (ingredient.contains( "sugar" ))
+        {
+            result = lookBehind(ingredient, "sugar", m, p);
+        }
+        else if (ingredient.contains( "extract" ))
+        {
+            result = lookBehind(ingredient, "extract", m, p);
+        }
+        else if (ingredient.contains( "flour" ))
+        {
+            result = lookBehind(ingredient, "flour", m, p);
         }
         else
         {

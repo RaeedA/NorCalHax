@@ -28,7 +28,7 @@ public class Test
         
         //Go to google and do the search
         WebElement element = driver.findElement( By.name( "q" ) );
-        element.sendKeys( "vanilla cupcake recipes" );
+        element.sendKeys( "vanilla cake recipes" );
         element.submit();
         
         //Get links
