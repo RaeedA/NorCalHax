@@ -49,6 +49,10 @@ public class ResultScreen extends JFrame
         
         c.gridy = 1;
         panel.add(instructions, c);
+        
+        add(panel);
+        
+        pack();
     }
     
     private JPanel displayInstructions()
