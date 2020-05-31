@@ -123,7 +123,7 @@ public class CookBook
         {
             drivers[i].quit();
         }
-        ( (LoadingScreen)bar.getParent().getParent() ).setVisible( false );
+        ((LoadingScreen)( bar.getParent().getParent().getParent().getParent().getParent())).setVisible( false );
         ResultScreen screen = new ResultScreen(this);
     }
     

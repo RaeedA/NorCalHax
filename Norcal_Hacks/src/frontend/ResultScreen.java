@@ -44,7 +44,6 @@ public class ResultScreen extends JFrame
     private JPanel displayInstructions()
     {
         ArrayList<String> instructions = recipe.getMyInstructions();
-        String instructionsText = "";
         JPanel instructionsPanel = new JPanel();
         BoxLayout instructionsLayout = new BoxLayout(instructionsPanel, BoxLayout.Y_AXIS);
         instructionsPanel.setLayout( instructionsLayout );
@@ -63,6 +62,7 @@ public class ResultScreen extends JFrame
         //Label
         instructionsPanel.add( makeLabel("Instructions: ", JLabel.LEFT, JLabel.CENTER) );
         instructionsPanel.add( instructionsArea );
+        instructionsPanel.setBackground( Color.ORANGE );
         return instructionsPanel;
     }
     
@@ -96,11 +96,12 @@ public class ResultScreen extends JFrame
             }
             
         }
+        ingredientsPanel.setBackground( Color.ORANGE );
         return ingredientsPanel;
     }
     
     //Bug?
-    public JPanel displayTitle()
+    private JPanel displayTitle()
     {
         JPanel titlePanel = new JPanel();
         JLabel titleLabel = new JLabel( book.getProduct() + " Recipe:");
@@ -120,6 +121,16 @@ public class ResultScreen extends JFrame
         
         titlePanel.add( titleLabel );
         return titlePanel;
+    }
+    
+    //private JPanel displayOtherResults()
+    {
+        
+    }
+    
+    public void setRecipe(Recipe recipe)
+    {
+        this.recipe = recipe;
     }
     
     
