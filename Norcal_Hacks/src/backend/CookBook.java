@@ -162,7 +162,7 @@ public class CookBook
     
     public Recipe chooseBestRecipe()
     {
-        if(sortedRecipes.isEmpty())
+        if(recipes.isEmpty())
         {
             return null;
         }
