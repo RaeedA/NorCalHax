@@ -35,9 +35,4 @@ public class LoadingScreen extends JFrame
         setLocationRelativeTo( null );
         setVisible(true);
     }
-    
-    public void finish()
-    {
-        ResultScreen result = new ResultScreen(book);
-    }
 }
