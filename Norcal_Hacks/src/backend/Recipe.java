@@ -1,18 +1,29 @@
 package backend;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.WebElement;
 
+/**
+ *  Represents a recipe with instructions, ingredients, and a link
+ *
+ *  @author  Raeed Azom & Jeffery Lee
+ *  @version May 31, 2020
+ *  @author  Projects: Norcal_Hacks
+ */
 public class Recipe
 {
     private ArrayList<Ingredient> myIngredients;
     private ArrayList<String> myInstructions;
     private String myLink;
     
+    /**
+     * @param ingredients webelements of ingredients
+     * @param instructions webelements with instructions
+     * @param link link to site
+     */
     public Recipe(ArrayList<WebElement> ingredients, ArrayList<WebElement> instructions, String link)
     {
         myLink = link;

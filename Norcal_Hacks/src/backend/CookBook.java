@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.WebDriverException;
 
 public class CookBook
 {
@@ -69,7 +68,7 @@ public class CookBook
         {
             if (link.contains( s ))
             {
-                WebDriver d = new ChromeDriver();
+                WebDriver d = new ChromeDriver(options);
                 SearchThread t = new SearchThread(d, s, link, this);
                 threadCounter++;
                 t.start();
@@ -83,10 +82,18 @@ public class CookBook
         threadCounter--;
     }
     
-    public boolean isDone()
+    public synchronized boolean isDone()
     {
-        //System.out.print(threadCounter);
         return threadCounter == 0;
+    }
+    
+    public Recipe chooseBestRecipe()
+    {
+        if(recipes.size() == 0)
+        {
+            return null;
+        }
+        return recipes.get( 0 );
     }
     
     public String toString()

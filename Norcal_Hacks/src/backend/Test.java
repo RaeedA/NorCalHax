@@ -9,7 +9,6 @@ public class Test
         
         while(!book.isDone())
         {
-            System.out.print("");
         }
         System.out.println("Book:\n" + book);
         

@@ -3,6 +3,13 @@ package backend;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *  Represents an ingredient in a recipe
+ *
+ *  @author  Raeed Azom & Jeffery Lee
+ *  @version May 31, 2020
+ *  @author  Project: Norcal_Hacks
+ */
 public class Ingredient
 {
     private String type;
@@ -10,8 +17,8 @@ public class Ingredient
     private String units;
     
     /**
-     * @param g1 group one of matcher
-     * @param g2 group two of matcher
+     * @param m matcher for the ingredients
+     * @param ingredient type of ingredient
      */
     public Ingredient(Matcher m, String ingredient)
     {
@@ -30,6 +37,11 @@ public class Ingredient
         units = null;
     }
 
+    /**
+     * Finds the "type" of ingredient from the string using regex
+     * @param ingredient contains type and other info
+     * @return type and any extra info
+     */
     public String findType(String ingredient)
     {
         Pattern p = null;
@@ -104,6 +116,14 @@ public class Ingredient
         return result;
     }
     
+    /**
+     * regex helper to get the word before word
+     * @param string string that regex is used on
+     * @param word word before word to get
+     * @param m matcher for regex
+     * @param p pattern for matcher
+     * @return string containing word and word behind it
+     */
     private String lookBehind(String string, String word, Matcher m, Pattern p)
     {
         p = Pattern.compile( "[\\w-]+\\s+(?=" + word + ")" );
@@ -115,6 +135,10 @@ public class Ingredient
         return word;
     }
     
+    /**
+     * checks if this is a measurable ingredient
+     * @return measurability
+     */
     public boolean isMeasureable()
     {
         return !(amount == null && units == null);
