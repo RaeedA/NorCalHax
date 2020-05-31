@@ -3,6 +3,7 @@ package backend;
 import java.util.ArrayList;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -13,79 +14,74 @@ public class SearchThread extends Thread
     private String myLink;
     private CookBook myBook;
     
-    public SearchThread(WebDriver d, String type, String link, CookBook book)
+    public SearchThread(WebDriver d, CookBook book)
     {
         myDriver = d;
-        myType = type;
-        myLink = link;
         myBook = book;
     }
     
     @Override
     public void run()
     {
-        try
+        while (myBook.hasLinks())
         {
-            myDriver.get( myLink );
-            getRecipe();
-            return;
+            getNewLink();
+            try
+            {
+                myDriver.get( myLink );
+                getRecipe();
+            }
+            catch(NoClassDefFoundError e)
+            {
+                myBook.addRecipe( null );
+            }
         }
-        catch(NoClassDefFoundError e)
-        {
-            myBook.addRecipe( null );
-            return;
-        }
-        //System.out.println("complete");
+        myDriver.quit();
+    }
+    
+    public void getNewLink()
+    {
+        String[] results = myBook.getLink();
+        myLink = results[0];
+        myType = results[1];
     }
     
     private void getRecipe()
     {
-        ArrayList<WebElement> ingredientss;
-        ArrayList<WebElement> instructionss;
-        ArrayList<String> ingredients;
-        ArrayList<String> instructions;
-        WebElement cookingTime;
+        ArrayList<WebElement> ingredients = null;
+        ArrayList<WebElement> instructions = null;
+        WebElement cookingTime = null;
         switch(myType)
         {
             case("foodnetwork"):
-                ingredientss = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Ingredients__a-Ingredient" ) );
-                ingredients = new ArrayList<String>();
-                for (WebElement w : ingredientss)
-                {
-                    ingredients.add( w.getText().trim() );
-                }
-                instructionss = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Method__m-Step" ) );
-                instructions = new ArrayList<String>();
-                for (WebElement w : instructionss)
-                {
-                    instructions.add(w.getText().trim());
-                }
-                cookingTime = myDriver.findElement( By.className( "o-RecipeInfo__a-Description m-RecipeInfo__a-Description--Total" ) );
-                myBook.addRecipe( new Recipe(ingredients, instructions, myLink, cookingTime.getText().trim()) );
-                myDriver.quit();
+                try {
+                ingredients = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Ingredients__a-Ingredient" ) );
+                instructions = (ArrayList<WebElement>)myDriver.findElements( By.className( "o-Method__m-Step" ) );
+                cookingTime = myDriver.findElement( By.cssSelector( ".o-RecipeInfo__a-Description.m-RecipeInfo__a-Description--Total" ) );
                 break;
+                }
+                catch(NoSuchElementException e)
+                {
+                    myBook.addRecipe(null);
+                    return;
+                }
                 
             case("sallysbaking"):
-                ingredientss = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-ingredients" ) );
-                String ingredientList = ingredientss.get( 0 ).getText().trim();
-                ingredients = new ArrayList<String>();
-                while (ingredientList.contains( "\n" ))
+            {
+                try
                 {
-                    ingredients.add( ingredientList.substring( 0, ingredientList.indexOf( "\n" ) ).trim() );
-                    ingredientList = ingredientList.substring( ingredientList.indexOf( "\n" ) ).trim();
+                    ingredients = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-ingredients" ) );
+                    instructions = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-instructions" ) );
+                    cookingTime = myDriver.findElement(By.className("tasty-recipes-total-time"));
+                    break;
                 }
-                instructionss = (ArrayList<WebElement>)myDriver.findElements( By.className( "tasty-recipes-instructions" ) );
-                String instructionList = instructionss.get( 0 ).getText().trim();
-                instructions = new ArrayList<String>();
-                while (instructionList.contains( "\n" ))
+                catch(IndexOutOfBoundsException e)
                 {
-                    instructions.add( instructionList.substring( 0, instructionList.indexOf( "\n" ) ).trim() );
-                    instructionList = instructionList.substring( instructionList.indexOf( "\n" ) ).trim();
+                    myBook.addRecipe(null);
+                    return;
                 }
-                cookingTime = myDriver.findElement(By.className("tasty-recipes-total-time"));
-                myBook.addRecipe( new Recipe(ingredients, instructions, myLink, cookingTime.getText().trim()) );
-                myDriver.quit();
-                break;
+            }
         }
+        ChefThread t = new ChefThread(myLink, myType, ingredients, instructions, cookingTime, myBook);
     }
 }

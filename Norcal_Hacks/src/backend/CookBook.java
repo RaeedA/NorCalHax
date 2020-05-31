@@ -1,11 +1,14 @@
 package backend;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Stack;
+
+import frontend.LoadingScreen;
+import javax.swing.JProgressBar;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,14 +22,28 @@ public class CookBook
     private ChromeOptions options;
     private WebDriver driver;
     private String[] accepted;
-    private int threadCounter;
+    private JProgressBar bar;
+    private int threadNum = 2;
+    private int completed;
+    private int maxRecipes;
+    private Stack<String> links;
     
     public CookBook()
     {
         recipes = new ArrayList<Recipe>();
         accepted = new String[] {"foodnetwork", "sallysbaking"};
-        threadCounter = 0;
-        
+        completed = 0;
+    }
+    
+    public void startRunnerThread()
+    {
+        RunnerThread t = new RunnerThread(this);
+        t.start();
+        return;
+    }
+    
+    public void getLinks(String product)
+    {
         //Setup driver and put it on google
         System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
         ChromeOptions o = new ChromeOptions();
@@ -36,10 +53,7 @@ public class CookBook
         options = o;
         driver = new ChromeDriver(o);
         driver.get("https://google.com");
-    }
-    
-    public void getRecipes(String product)
-    {
+        
         //Go to google and do the search
         WebElement element = driver.findElement( By.name( "q" ) );
         element.sendKeys( product + "recipes" );
@@ -48,40 +62,46 @@ public class CookBook
         //Get links
         element = driver.findElement( By.id( "rso" ) );
         List<WebElement> elements = element.findElements( By.cssSelector( "a" ) );
-        HashSet<String> links = new HashSet<String>();
+        links = new Stack<String>();
         for (WebElement w : elements)
         {
             String link = w.getAttribute( "href" );
             if(!link.contains( "google" ) && !link.contains( "youtube" ))
             {
-                links.add( link.trim() );
+                links.push( link.trim() );
             }
         }
-        
-        for (String s : links)
-        {
-            searchLink(s);
-        }
-        
+        maxRecipes = links.size();
+        bar = new JProgressBar(0, maxRecipes);
+        bar.setValue( 0 );
         driver.quit();
     }
     
-    private void searchLink(String link)
+    public void getRecipes()
     {
-        for(String s : accepted)
+        for (int i = 0; i < threadNum; i++)
         {
-            if (link.contains( s ))
+            WebDriver driver = new ChromeDriver(options);
+            SearchThread thread = new SearchThread(driver, this);
+        }
+    }
+    
+    public synchronized String[] getLink()
+    {
+        while (true)
+        {
+            String link = links.pop();
+            for(String s : accepted)
             {
-                while(!isAvailable()){}
-                WebDriver d = new ChromeDriver(options);
-                SearchThread t = new SearchThread(d, s, link, this);
-                threadCounter++;
-                t.start();
+                if (link.contains( s ))
+                {
+                    return new String[] {link, s};
+                }
             }
         }
     }
     
-    public void addRecipe(Recipe r)
+    public synchronized void addRecipe(Recipe r)
     {
         if (r == null)
         {
@@ -90,17 +110,22 @@ public class CookBook
         {
             recipes.add( r );
         }
-        threadCounter--;
-    }
-    
-    public synchronized boolean isAvailable()
-    {
-        return threadCounter <= 1;
+        completed++;
+        bar.setValue( completed );
+        if (bar.getValue() == maxRecipes)
+        {
+            ( (LoadingScreen)bar.getParent().getParent() ).finish();
+        }
     }
     
     public synchronized boolean isDone()
     {
-        return threadCounter == 0;
+        return completed >= maxRecipes;
+    }
+    
+    public JProgressBar getBar()
+    {
+        return bar;
     }
     
     public Recipe chooseBestRecipe()
@@ -110,6 +135,16 @@ public class CookBook
             return null;
         }
         return recipes.get( 0 );
+    }
+    
+    public int numCompleted()
+    {
+        return completed;
+    }
+    
+    public int getTotalRecipes()
+    {
+        return maxRecipes;
     }
     
     public Queue<Recipe> sortByTime()
@@ -130,5 +165,10 @@ public class CookBook
             result += (i+1) + ":\n" + recipes.get( i ) + "\n";
         }
         return result;
+    }
+    
+    public boolean hasLinks()
+    {
+        return !links.isEmpty();
     }
 }

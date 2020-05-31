@@ -4,36 +4,43 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class SearchScreen extends Screen
+import backend.CookBook;
+
+public class SearchScreen extends JFrame
 {
-    // GUI components
     private JPanel searchPanel;
-    
-    // Buttons
     private JButton searchButton;
-    
-    // TextFields
     private JTextField searchField;
+    private CookBook book;
     
     public SearchScreen()
     {
-        super("Search Recipes");
+        super("Search");
         setComponents();
+        
+        book = new CookBook();
+        
+        //Wrap up
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo( null );
+        pack();
+        setVisible(true);
     }
 
-    @Override
-    protected void setComponents()
+    private void setComponents()
     {
         //GUI Components
         searchPanel = new JPanel();
-        searchButton = new JButton("Search");
+        searchPanel.setLayout( new BorderLayout() );
+        
+        searchButton = new JButton("Find Recipe!");
+        searchPanel.add( searchButton, BorderLayout.EAST);
+        
         searchField = new JTextField(20);
+        searchField.setSize( 30 ,20 );
+        searchPanel.add( searchField, BorderLayout.CENTER );
         
-        
-        searchPanel.add( searchField );
-        searchPanel.add( searchButton);
-        
-        add(searchPanel, BorderLayout.CENTER );
+        add(searchPanel);
         
         // Event Handlers for UI components
         searchButton.addActionListener( new ActionListener() 
@@ -42,39 +49,34 @@ public class SearchScreen extends Screen
             {
                 showResults(searchField.getText());
             }
-        });
+        }
+        );
         
         searchField.addKeyListener( new KeyListener()
         {
             @Override
             public void keyTyped( KeyEvent e ) {}
 
+
+            @Override
+            public void keyPressed( KeyEvent e ) {}
+
             @Override
             public void keyReleased( KeyEvent e )
             {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
                     showResults(searchField.getText());
                 }
             }
-
-            @Override
-            public void keyPressed( KeyEvent e ) {}
-        });
+        }
+        );
     }
     
     private void showResults(String search)
     {
-        foodName = search;
-        Screen result = new ResultScreen(foodName);
+        book.getLinks( search );
+        LoadingScreen screen = new LoadingScreen(book);
         setVisible(false);
-        result.setVisible( true );
     }
-
-    @Override
-    protected void resetSearch()
-    {
-        searchField.setText( null );
-    }
-    
 }

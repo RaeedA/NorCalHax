@@ -9,17 +9,15 @@ import backend.*;
 
 public class ResultScreen extends Screen
 {
-    Recipe recipe;
-    CookBook book;
-    public ResultScreen(String foodToSearch)
+    private Recipe recipe;
+    private CookBook book;
+    
+    public ResultScreen(CookBook book)
     {
-        super(foodToSearch);
-        foodName = foodToSearch;
-        book = new CookBook();
-        book.getRecipes( foodName );
-        while(!book.isDone()){}
+        super("Result!");
         recipe = book.chooseBestRecipe();
         setComponents();
+        pack();
     }
 
     @Override
@@ -28,7 +26,6 @@ public class ResultScreen extends Screen
         add(displayTitle(), BorderLayout.NORTH);
         add(displayIngredients(), BorderLayout.WEST );
         add(displayInstructions(), BorderLayout.EAST );
-        pack();
     }
 
     @Override
@@ -85,7 +82,7 @@ public class ResultScreen extends Screen
         constraints.weightx += 5;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.EAST), constraints );
+        ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.CENTER), constraints );
         constraints.gridy = 1;
         constraints.weighty += 5;
         Ingredient ingredient;
@@ -97,7 +94,7 @@ public class ResultScreen extends Screen
             constraints.gridx = 1;
             constraints.gridy++;
             ingredientsPanel.add( new JLabel(ingredient.getType()),constraints );
-            if(ingredient.getAmount() != null || ingredient.getUnits() != null)
+            if(ingredient.isMeasureable())
             {
                 constraints.gridx = 3;
                 ingredientsPanel.add( new JLabel(ingredient.getAmount() + " " + ingredient.getUnits()), constraints);

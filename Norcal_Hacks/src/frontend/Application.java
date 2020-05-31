@@ -11,7 +11,7 @@ public class Application
         {
             public void run()
             {
-                Screen searchScreen = new SearchScreen();
+                SearchScreen searchScreen = new SearchScreen();
                 searchScreen.setVisible( true );
             }
         });

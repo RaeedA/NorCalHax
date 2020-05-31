@@ -6,7 +6,7 @@ public class Test
 {
     public static void main(String[] args)
     {
-        CookBook book = new CookBook();
+        /*CookBook book = new CookBook();
         book.getRecipes( "vanilla cake" );
         
         while(!book.isDone())
@@ -21,6 +21,6 @@ public class Test
         //Close everything
         //myDriver.quit();
         System.out.println("Done!");
-        System.exit( 0 );
+        System.exit( 0 );*/
     }
 }

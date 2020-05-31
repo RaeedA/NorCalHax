@@ -42,10 +42,6 @@ public abstract class Screen extends JFrame
             }
         });
     }
-    public String getFoodName()
-    {
-        return foodName;
-    }
     
     protected abstract void setComponents();
     protected abstract void resetSearch();
