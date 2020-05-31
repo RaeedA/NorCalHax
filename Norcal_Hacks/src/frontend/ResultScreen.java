@@ -130,7 +130,7 @@ public class ResultScreen extends JFrame
 //        
 //        int fontSizeToUse = Math.min( newFontSize, componentHeight );
 //        
-//       titleLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+//        titleLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
         
         titlePanel.add( titleLabel );
         return titlePanel;
