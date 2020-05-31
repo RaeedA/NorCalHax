@@ -116,7 +116,7 @@ public class CookBook
     
     public void finish()
     {
-        ( (LoadingScreen)bar.getParent().getParent() ).setVisible( false );
+        ((LoadingScreen)( bar.getParent().getParent().getParent().getParent().getParent())).setVisible( false );
         ResultScreen screen = new ResultScreen(this);
     }
     
