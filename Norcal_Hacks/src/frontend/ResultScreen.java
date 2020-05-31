@@ -84,8 +84,6 @@ public class ResultScreen extends Screen
         
         constraints.fill = fillCons;
         constraints.weightx += 5;
-        constraints.gridx = 0;
-        ingredientsPanel.add( new JLabel() );
         constraints.gridx = 1;
         constraints.gridy = 0;
         ingredientsPanel.add( makeLabel("Ingredients", JLabel.CENTER, JLabel.CENTER), constraints );
