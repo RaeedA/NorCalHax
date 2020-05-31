@@ -29,10 +29,6 @@ public abstract class Screen extends JFrame
         
         // position frame in center of screen
         setLocationRelativeTo(null);
-        
-        // GUI components
-        setComponents();
-        
         // Setting frame behavior when user closes the Frame
         addWindowListener( new WindowAdapter() 
         {

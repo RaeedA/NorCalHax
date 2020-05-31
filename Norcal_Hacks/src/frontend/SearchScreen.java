@@ -18,6 +18,7 @@ public class SearchScreen extends Screen
     public SearchScreen()
     {
         super("Search Recipes");
+        setComponents();
     }
 
     @Override
