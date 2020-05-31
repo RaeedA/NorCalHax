@@ -75,8 +75,8 @@ public class SearchScreen extends JFrame
     
     private void showResults(String search)
     {
-        book.getLinks( search );
         setVisible(false);
+        book.getLinks( search );
         LoadingScreen screen = new LoadingScreen(book);
     }
 }

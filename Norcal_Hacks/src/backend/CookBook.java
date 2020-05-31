@@ -142,10 +142,9 @@ public class CookBook
             recipes.add( r );
         }
         completed++;
-        System.out.print( completed  + "/" + maxRecipes );
+        System.out.println( completed  + "/" + maxRecipes );
         bar.setValue( completed );
-        System.out.println(hasLinks());
-        if(!hasLinks())
+        if(!hasLinks() && completed == maxRecipes)
         {
             finish();
         }

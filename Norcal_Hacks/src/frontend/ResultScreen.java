@@ -12,10 +12,12 @@ public class ResultScreen extends JFrame
     private Recipe recipe;
     private CookBook book;
     private int recipeIndex;
+    private String product;
     
     public ResultScreen(CookBook book)
     {
         super("Result!");
+        product = book.getProduct();
         recipe = book.chooseBestRecipe();
         
         
@@ -109,7 +111,7 @@ public class ResultScreen extends JFrame
     private JPanel displayTitle()
     {
         JPanel titlePanel = new JPanel();
-        JLabel titleLabel = new JLabel( book.getProduct() + " Recipe:");
+        JLabel titleLabel = new JLabel(product + " Recipe:");
         Font labelFont = titleLabel.getFont();
         String labelText = titleLabel.getText();
         int stringWidth = titleLabel.getFontMetrics(labelFont).stringWidth(labelText);
