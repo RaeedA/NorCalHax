@@ -31,6 +31,7 @@ public class CookBook
     private Stack<String> links;
     private String product;
     private WebDriver[] drivers;
+    private Queue<Recipe> sortedRecipes;
     
     public CookBook()
     {
@@ -125,6 +126,10 @@ public class CookBook
         }
         ((LoadingScreen)( bar.getParent().getParent().getParent().getParent().getParent())).setVisible( false );
         ResultScreen screen = new ResultScreen(this);
+        sortedRecipes = sortByTime();
+        screen.setRecipe( chooseBestRecipe() );
+        screen.setRecipeIndex( 0 );
+        screen.start();
     }
     
     public synchronized void addRecipe(Recipe r)
@@ -157,11 +162,17 @@ public class CookBook
     
     public Recipe chooseBestRecipe()
     {
-        if(recipes.size() == 0)
+        if(sortedRecipes.isEmpty())
         {
             return null;
         }
-        return recipes.get( 0 );
+        //return recipes.get( 0 );
+        return sortedRecipes.remove();
+    }
+    
+    public Recipe getRecipe( int index )
+    {
+        return recipes.get( index );
     }
     
     public int numCompleted()
@@ -202,5 +213,10 @@ public class CookBook
     public String getProduct()
     {
         return product;
+    }
+    
+    public Queue<Recipe> getSortedRecipes()
+    {
+        return sortedRecipes;
     }
 }

@@ -11,6 +11,7 @@ public class ResultScreen extends JFrame
 {
     private Recipe recipe;
     private CookBook book;
+    private int recipeIndex;
     private String product;
     
     public ResultScreen(CookBook book)
@@ -18,17 +19,23 @@ public class ResultScreen extends JFrame
         super("Result!");
         product = book.getProduct();
         recipe = book.chooseBestRecipe();
-        JPanel panel = new JPanel();
-        panel.add(displayTitle(), BorderLayout.NORTH);
-        panel.add(displayIngredients(), BorderLayout.WEST );
-        panel.add(displayInstructions(), BorderLayout.EAST );
-        add(panel);
+        
         
         //Wrap up
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo( null );
         pack();
         setVisible(true); 
+    }
+    
+    public void start()
+    {
+        JPanel panel = new JPanel();
+        panel.add(displayTitle(), BorderLayout.NORTH);
+        panel.add(displayIngredients(), BorderLayout.WEST );
+        panel.add(displayInstructions(), BorderLayout.EAST );
+        panel.setBackground(Color.ORANGE);
+        add(panel);
     }
     
     private JLabel makeLabel( String text, int horizPosition, int vertPosition)
@@ -64,7 +71,6 @@ public class ResultScreen extends JFrame
         //Label
         instructionsPanel.add( makeLabel("Instructions: ", JLabel.LEFT, JLabel.CENTER) );
         instructionsPanel.add( instructionsArea );
-        instructionsPanel.setBackground( Color.ORANGE );
         return instructionsPanel;
     }
     
@@ -98,7 +104,6 @@ public class ResultScreen extends JFrame
             }
             
         }
-        ingredientsPanel.setBackground( Color.ORANGE );
         return ingredientsPanel;
     }
     
@@ -125,9 +130,24 @@ public class ResultScreen extends JFrame
         return titlePanel;
     }
     
-    //private JPanel displayOtherResults()
+    private JPanel displayOtherResults()
     {
+        ResultScreen screen1 = new ResultScreen(book);
+        ResultScreen screen2 = new ResultScreen(book);
         
+        Recipe nextRecipe = book.chooseBestRecipe();
+        if(nextRecipe != null)
+        {
+            screen1.setRecipe( book.chooseBestRecipe() );
+        }
+        nextRecipe = book.chooseBestRecipe();
+        if(nextRecipe != null)
+        {
+            screen2.setRecipe( book.chooseBestRecipe() );
+        }
+        screen1.setRecipeIndex( 1 );
+        screen2.setRecipeIndex( 2 );
+        return null;
     }
     
     public void setRecipe(Recipe recipe)
@@ -135,6 +155,14 @@ public class ResultScreen extends JFrame
         this.recipe = recipe;
     }
     
+    public void setRecipeIndex(int index)
+    {
+        recipeIndex = index;
+    }
     
+    private ResultScreen setUpNewResult( Recipe recipe, int recipeIndex)
+    {
+        return null;
+    }
 
 }
